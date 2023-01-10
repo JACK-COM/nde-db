@@ -11,7 +11,7 @@ declare global {
     /**
      * UTC Date-time
      */
-    date<FieldName extends string>(fieldName: FieldName, opts?: core.CommonInputFieldConfig<TypeName, FieldName>): void // "CsDateTime";
+    date<FieldName extends string>(fieldName: FieldName, opts?: core.CommonInputFieldConfig<TypeName, FieldName>): void // "NDDateTime";
   }
 }
 declare global {
@@ -19,7 +19,7 @@ declare global {
     /**
      * UTC Date-time
      */
-    date<FieldName extends string>(fieldName: FieldName, ...opts: core.ScalarOutSpread<TypeName, FieldName>): void // "CsDateTime";
+    date<FieldName extends string>(fieldName: FieldName, ...opts: core.ScalarOutSpread<TypeName, FieldName>): void // "NDDateTime";
   }
 }
 
@@ -35,6 +35,7 @@ export interface NexusGenEnums {
   ContentStatus: "draft" | "live" | "quarantined"
   ReporterType: "experiencer" | "observer" | "researcher"
   UserRoles: "admin" | "dataentry" | "moderator" | "researcher"
+  VideoSource: "other" | "vimeo" | "youtube"
 }
 
 export interface NexusGenScalars {
@@ -43,10 +44,81 @@ export interface NexusGenScalars {
   Float: number
   Boolean: boolean
   ID: string
-  CsDateTime: any
+  NDDateTime: any
 }
 
 export interface NexusGenObjects {
+  NDBook: { // root type
+    addedBy: number; // Int!
+    id?: string | null; // ID
+    lastUpdated?: NexusGenScalars['NDDateTime'] | null; // NDDateTime
+    publishDate?: string | null; // String
+    publisher?: string | null; // String
+    reporterId: number; // Int!
+    status: NexusGenEnums['ContentStatus']; // ContentStatus!
+    title: string; // String!
+  }
+  NDBookTag: { // root type
+    ContentTag?: NexusGenRootTypes['NDContentTag'] | null; // NDContentTag
+    addedBy: number; // Int!
+    bookId: number; // Int!
+    id?: string | null; // ID
+    lastUpdated?: NexusGenScalars['NDDateTime'] | null; // NDDateTime
+    reporterId: number; // Int!
+    status: NexusGenEnums['ContentStatus']; // ContentStatus!
+    tagId: number; // Int!
+  }
+  NDContentTag: { // root type
+    description: string; // String!
+    example?: string | null; // String
+    id?: string | null; // ID
+    name: string; // String!
+  }
+  NDReporter: { // root type
+    addedBy: number; // Int!
+    id?: string | null; // ID
+    lastUpdated?: NexusGenScalars['NDDateTime'] | null; // NDDateTime
+    name: string; // String!
+    status: NexusGenEnums['ContentStatus']; // ContentStatus!
+    type: NexusGenEnums['ReporterType']; // ReporterType!
+  }
+  NDVideo: { // root type
+    addedBy: number; // Int!
+    id?: string | null; // ID
+    lastUpdated?: NexusGenScalars['NDDateTime'] | null; // NDDateTime
+    reporterId: number; // Int!
+    source?: string | null; // String
+    status: NexusGenEnums['ContentStatus']; // ContentStatus!
+    url: string; // String!
+  }
+  NDVideoTag: { // root type
+    ContentTag?: NexusGenRootTypes['NDContentTag'] | null; // NDContentTag
+    addedBy: number; // Int!
+    id?: string | null; // ID
+    lastUpdated?: NexusGenScalars['NDDateTime'] | null; // NDDateTime
+    reporterId: number; // Int!
+    status: NexusGenEnums['ContentStatus']; // ContentStatus!
+    tagId: number; // Int!
+    videoId: number; // Int!
+  }
+  NDWebsite: { // root type
+    addedBy: number; // Int!
+    id?: string | null; // ID
+    lastUpdated?: NexusGenScalars['NDDateTime'] | null; // NDDateTime
+    reporterId: number; // Int!
+    status: NexusGenEnums['ContentStatus']; // ContentStatus!
+    url: string; // String!
+  }
+  NDWebsiteTag: { // root type
+    ContentTag?: NexusGenRootTypes['NDContentTag'] | null; // NDContentTag
+    addedBy: number; // Int!
+    id?: string | null; // ID
+    lastUpdated?: NexusGenScalars['NDDateTime'] | null; // NDDateTime
+    reporterId: number; // Int!
+    status: NexusGenEnums['ContentStatus']; // ContentStatus!
+    tagId: number; // Int!
+    websiteId: number; // Int!
+  }
   Query: {};
 }
 
@@ -61,12 +133,154 @@ export type NexusGenRootTypes = NexusGenObjects
 export type NexusGenAllTypes = NexusGenRootTypes & NexusGenScalars & NexusGenEnums
 
 export interface NexusGenFieldTypes {
+  NDBook: { // field return type
+    addedBy: number; // Int!
+    id: string | null; // ID
+    lastUpdated: NexusGenScalars['NDDateTime'] | null; // NDDateTime
+    publishDate: string | null; // String
+    publisher: string | null; // String
+    reporterId: number; // Int!
+    status: NexusGenEnums['ContentStatus']; // ContentStatus!
+    title: string; // String!
+  }
+  NDBookTag: { // field return type
+    ContentTag: NexusGenRootTypes['NDContentTag'] | null; // NDContentTag
+    addedBy: number; // Int!
+    bookId: number; // Int!
+    id: string | null; // ID
+    lastUpdated: NexusGenScalars['NDDateTime'] | null; // NDDateTime
+    reporterId: number; // Int!
+    status: NexusGenEnums['ContentStatus']; // ContentStatus!
+    tagId: number; // Int!
+  }
+  NDContentTag: { // field return type
+    description: string; // String!
+    example: string | null; // String
+    id: string | null; // ID
+    name: string; // String!
+  }
+  NDReporter: { // field return type
+    addedBy: number; // Int!
+    id: string | null; // ID
+    lastUpdated: NexusGenScalars['NDDateTime'] | null; // NDDateTime
+    name: string; // String!
+    status: NexusGenEnums['ContentStatus']; // ContentStatus!
+    type: NexusGenEnums['ReporterType']; // ReporterType!
+  }
+  NDVideo: { // field return type
+    addedBy: number; // Int!
+    id: string | null; // ID
+    lastUpdated: NexusGenScalars['NDDateTime'] | null; // NDDateTime
+    reporterId: number; // Int!
+    source: string | null; // String
+    status: NexusGenEnums['ContentStatus']; // ContentStatus!
+    url: string; // String!
+  }
+  NDVideoTag: { // field return type
+    ContentTag: NexusGenRootTypes['NDContentTag'] | null; // NDContentTag
+    addedBy: number; // Int!
+    id: string | null; // ID
+    lastUpdated: NexusGenScalars['NDDateTime'] | null; // NDDateTime
+    reporterId: number; // Int!
+    status: NexusGenEnums['ContentStatus']; // ContentStatus!
+    tagId: number; // Int!
+    videoId: number; // Int!
+  }
+  NDWebsite: { // field return type
+    addedBy: number; // Int!
+    id: string | null; // ID
+    lastUpdated: NexusGenScalars['NDDateTime'] | null; // NDDateTime
+    reporterId: number; // Int!
+    status: NexusGenEnums['ContentStatus']; // ContentStatus!
+    url: string; // String!
+  }
+  NDWebsiteTag: { // field return type
+    ContentTag: NexusGenRootTypes['NDContentTag'] | null; // NDContentTag
+    addedBy: number; // Int!
+    id: string | null; // ID
+    lastUpdated: NexusGenScalars['NDDateTime'] | null; // NDDateTime
+    reporterId: number; // Int!
+    status: NexusGenEnums['ContentStatus']; // ContentStatus!
+    tagId: number; // Int!
+    websiteId: number; // Int!
+  }
   Query: { // field return type
     ok: boolean; // Boolean!
   }
 }
 
 export interface NexusGenFieldTypeNames {
+  NDBook: { // field return type name
+    addedBy: 'Int'
+    id: 'ID'
+    lastUpdated: 'NDDateTime'
+    publishDate: 'String'
+    publisher: 'String'
+    reporterId: 'Int'
+    status: 'ContentStatus'
+    title: 'String'
+  }
+  NDBookTag: { // field return type name
+    ContentTag: 'NDContentTag'
+    addedBy: 'Int'
+    bookId: 'Int'
+    id: 'ID'
+    lastUpdated: 'NDDateTime'
+    reporterId: 'Int'
+    status: 'ContentStatus'
+    tagId: 'Int'
+  }
+  NDContentTag: { // field return type name
+    description: 'String'
+    example: 'String'
+    id: 'ID'
+    name: 'String'
+  }
+  NDReporter: { // field return type name
+    addedBy: 'Int'
+    id: 'ID'
+    lastUpdated: 'NDDateTime'
+    name: 'String'
+    status: 'ContentStatus'
+    type: 'ReporterType'
+  }
+  NDVideo: { // field return type name
+    addedBy: 'Int'
+    id: 'ID'
+    lastUpdated: 'NDDateTime'
+    reporterId: 'Int'
+    source: 'String'
+    status: 'ContentStatus'
+    url: 'String'
+  }
+  NDVideoTag: { // field return type name
+    ContentTag: 'NDContentTag'
+    addedBy: 'Int'
+    id: 'ID'
+    lastUpdated: 'NDDateTime'
+    reporterId: 'Int'
+    status: 'ContentStatus'
+    tagId: 'Int'
+    videoId: 'Int'
+  }
+  NDWebsite: { // field return type name
+    addedBy: 'Int'
+    id: 'ID'
+    lastUpdated: 'NDDateTime'
+    reporterId: 'Int'
+    status: 'ContentStatus'
+    url: 'String'
+  }
+  NDWebsiteTag: { // field return type name
+    ContentTag: 'NDContentTag'
+    addedBy: 'Int'
+    id: 'ID'
+    lastUpdated: 'NDDateTime'
+    reporterId: 'Int'
+    status: 'ContentStatus'
+    tagId: 'Int'
+    websiteId: 'Int'
+  }
   Query: { // field return type name
     ok: 'Boolean'
   }

@@ -1,8 +1,8 @@
 import { DateTime } from "luxon";
 import { scalarType } from "nexus";
 
-export const CsDateTime = scalarType({
-  name: "CsDateTime",
+export const NDDateTime = scalarType({
+  name: "NDDateTime",
   asNexusMethod: "date",
   description: "UTC Date-time",
 

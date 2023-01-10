@@ -1,7 +1,7 @@
+import { Passport } from "passport";
 import { PrismaClient } from "@prisma/client";
 
 export interface DBContext {
-  db: PrismaClient;
   Books: PrismaClient["book"];
   BookTags: PrismaClient["bookTags"];
   ContentTags: PrismaClient["contentTag"];
@@ -9,12 +9,13 @@ export interface DBContext {
   Users: PrismaClient["user"];
   Videos: PrismaClient["video"];
   VideoTags: PrismaClient["videoTags"];
+  user?: any
 }
 
-const db = new PrismaClient();
+export const passport = new Passport();
 
+const db = new PrismaClient();
 export const context: DBContext = {
-  db,
   Books: db.book,
   BookTags: db.bookTags,
   ContentTags: db.contentTag,

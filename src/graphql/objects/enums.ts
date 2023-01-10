@@ -22,6 +22,17 @@ export const ContentStatus = enumType({
   }
 });
 
+/** Known Video sources (to facilitate embedding in UI clients) */
+export const VideoSource = enumType({
+  name: "VideoSource",
+  description: "Video sources (to facilitate UI embedding)",
+  members: {
+    youtube: "youtube",
+    vimeo: "vimeo",
+    other: "other"
+  }
+});
+
 /** Roles assigned to data readers/writers */
 export const UserRoles = enumType({
   name: "UserRoles",

@@ -9,8 +9,153 @@ enum ContentStatus {
   quarantined
 }
 
+"""A book detailing one or more EXPERIENCEs"""
+type NDBook {
+  """User that added this recordd"""
+  addedBy: Int!
+  id: ID
+
+  """Date content was last updated"""
+  lastUpdated: NDDateTime
+
+  """Date or month/year (or year)"""
+  publishDate: String
+
+  """Book publisher if available"""
+  publisher: String
+
+  """EXPERIENCE reporter"""
+  reporterId: Int!
+
+  """Content visibility status"""
+  status: ContentStatus!
+  title: String!
+}
+
+"""Book content tags"""
+type NDBookTag {
+  ContentTag: NDContentTag
+
+  """User that added this recordd"""
+  addedBy: Int!
+  bookId: Int!
+  id: ID
+
+  """Date content was last updated"""
+  lastUpdated: NDDateTime
+
+  """EXPERIENCE reporter"""
+  reporterId: Int!
+
+  """Content visibility status"""
+  status: ContentStatus!
+  tagId: Int!
+}
+
+"""Labels to identify where a topic is discussed in media"""
+type NDContentTag {
+  description: String!
+  example: String
+  id: ID
+  name: String!
+}
+
 """UTC Date-time"""
-scalar CsDateTime
+scalar NDDateTime
+
+"""An individual that reports an EXPERIENCE"""
+type NDReporter {
+  """User that added this recordd"""
+  addedBy: Int!
+  id: ID
+
+  """Date content was last updated"""
+  lastUpdated: NDDateTime
+  name: String!
+
+  """Content visibility status"""
+  status: ContentStatus!
+  type: ReporterType!
+}
+
+"""Interviews about a single EXPERIENCE or REPORTER."""
+type NDVideo {
+  """User that added this recordd"""
+  addedBy: Int!
+  id: ID
+
+  """Date content was last updated"""
+  lastUpdated: NDDateTime
+
+  """EXPERIENCE reporter"""
+  reporterId: Int!
+
+  """youtube | vimeo | other"""
+  source: String
+
+  """Content visibility status"""
+  status: ContentStatus!
+
+  """Video URL"""
+  url: String!
+}
+
+"""Video content tags"""
+type NDVideoTag {
+  ContentTag: NDContentTag
+
+  """User that added this recordd"""
+  addedBy: Int!
+  id: ID
+
+  """Date content was last updated"""
+  lastUpdated: NDDateTime
+
+  """EXPERIENCE reporter"""
+  reporterId: Int!
+
+  """Content visibility status"""
+  status: ContentStatus!
+  tagId: Int!
+  videoId: Int!
+}
+
+"""Websites that document an EXPERIENCE."""
+type NDWebsite {
+  """User that added this recordd"""
+  addedBy: Int!
+  id: ID
+
+  """Date content was last updated"""
+  lastUpdated: NDDateTime
+
+  """EXPERIENCE reporter"""
+  reporterId: Int!
+
+  """Content visibility status"""
+  status: ContentStatus!
+  url: String!
+}
+
+"""Website content tags"""
+type NDWebsiteTag {
+  ContentTag: NDContentTag
+
+  """User that added this recordd"""
+  addedBy: Int!
+  id: ID
+
+  """Date content was last updated"""
+  lastUpdated: NDDateTime
+
+  """EXPERIENCE reporter"""
+  reporterId: Int!
+
+  """Content visibility status"""
+  status: ContentStatus!
+  tagId: Int!
+  websiteId: Int!
+}
 
 type Query {
   ok: Boolean!
@@ -29,4 +174,11 @@ enum UserRoles {
   dataentry
   moderator
   researcher
+}
+
+"""Video sources (to facilitate UI embedding)"""
+enum VideoSource {
+  other
+  vimeo
+  youtube
 }
