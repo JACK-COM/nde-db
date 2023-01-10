@@ -32,7 +32,9 @@ export interface NexusGenInputs {
 }
 
 export interface NexusGenEnums {
-  Temperature: "cool" | "hot" | "warm"
+  ContentStatus: "draft" | "live" | "quarantined"
+  ReporterType: "experiencer" | "observer" | "researcher"
+  UserRoles: "admin" | "dataentry" | "moderator" | "researcher"
 }
 
 export interface NexusGenScalars {

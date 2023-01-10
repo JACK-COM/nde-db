@@ -7,23 +7,179 @@ datasource db {
   url      = env("DB_URL")
 }
 
+// User authentication source
 enum Authenticator {
-  facebook
   google
-  twitter
+  magic
   other
 }
 
-// A user
+// NDE Experience Reporter type
+enum ReporterType {
+  experiencer
+  observer
+  researcher
+}
+
+// Content publication status
+enum ContentStatus {
+  live
+  draft
+  quarantined
+}
+
+// User roles
+enum UserRoles {
+  admin
+  moderator
+  dataentry
+  researcher
+}
+
+// Application user
 model User {
-  id         Int           @id @default(autoincrement())
-  email      String        @unique @db.VarChar(255)
-  // Authentication source (facebook, google, twitter, other)
-  authSource Authenticator
-  // Account creation date
-  created    DateTime      @default(now())
-  // Last login date
-  lastSeen   DateTime      @default(now())
-  // Account password
-  password   String        @db.VarChar(255)
+  id          Int           @id @default(autoincrement())
+  email       String        @unique @db.VarChar(255)
+  role        UserRoles     @default(researcher) // User type 
+  auth        Authenticator // Authentication source 
+  created     DateTime      @default(now()) // Account creation date
+  lastSeen    DateTime      @default(now()) // Last login date
+  Book        Book[]
+  Video       Video[]
+  Website     Website[]
+  Reporter    Reporter[]
+  BookTags    BookTags[]
+  VideoTags   VideoTags[]
+  WebsiteTags WebsiteTags[]
+}
+
+// Labels that identify when/where a topic is discussed in media (e.g. video timestamp)
+model ContentTag {
+  id          Int           @id @default(autoincrement())
+  name        String
+  description String
+  example     String?
+  BookTags    BookTags[]
+  VideoTags   VideoTags[]
+  WebsiteTags WebsiteTags[]
+}
+
+// A list of REPORTERS. (person who originally described an EXPERIENCE)
+model Reporter {
+  id          Int           @id @default(autoincrement())
+  name        String
+  type        ReporterType  @default(experiencer)
+  Book        Book[]
+  Video       Video[]
+  Website     Website[]
+  status      ContentStatus @default(draft)
+  User        User          @relation(fields: [addedBy], references: [id], onDelete: SetDefault)
+  addedBy     Int
+  lastUpdated DateTime      @default(now())
+  BookTags    BookTags[]
+  VideoTags   VideoTags[]
+  WebsiteTags WebsiteTags[]
+}
+
+// Books written about (or containing) an EXPERIENCE. 
+model Book {
+  id          Int     @id @default(autoincrement())
+  title       String
+  publisher   String? // add if available
+  publishDate String? // can be date/time or Mon. YYYY
+
+  // Housekeeping fields
+  Reporter    Reporter      @relation(fields: [reporterId], references: [id], onDelete: Cascade)
+  reporterId  Int
+  status      ContentStatus @default(draft)
+  User        User          @relation(fields: [addedBy], references: [id], onDelete: SetDefault)
+  addedBy     Int
+  lastUpdated DateTime      @default(now())
+  BookTags    BookTags[]
+}
+
+// Interviews about a single EXPERIENCE or REPORTER.
+model Video {
+  id     Int     @id @default(autoincrement())
+  url    String
+  source String? // predefined: youtube, vimeo, other
+
+  // Housekeeping fields
+  Reporter    Reporter      @relation(fields: [reporterId], references: [id], onDelete: Cascade)
+  reporterId  Int
+  status      ContentStatus @default(draft)
+  User        User          @relation(fields: [addedBy], references: [id], onDelete: SetDefault)
+  addedBy     Int
+  lastUpdated DateTime      @default(now())
+  VideoTags   VideoTags[]
+}
+
+// Interviews about a single EXPERIENCE or REPORTER.
+model Website {
+  id  Int    @id @default(autoincrement())
+  url String
+
+  // Housekeeping fields
+  Reporter    Reporter      @relation(fields: [reporterId], references: [id], onDelete: Cascade)
+  reporterId  Int
+  status      ContentStatus @default(draft)
+  User        User          @relation(fields: [addedBy], references: [id], onDelete: SetDefault)
+  addedBy     Int
+  lastUpdated DateTime      @default(now())
+  WebsiteTags WebsiteTags[]
+}
+
+// Book content tags
+model BookTags {
+  id         Int        @id @default(autoincrement())
+  Book       Book       @relation(fields: [bookId], references: [id], onDelete: Cascade)
+  bookId     Int
+  ContentTag ContentTag @relation(fields: [tagId], references: [id], onDelete: SetDefault)
+  tagId      Int
+
+  title       String
+  publisher   String? // add if available
+  publishDate String? // can be date/time or Mon. YYYY
+
+  // Housekeeping fields
+  status      ContentStatus @default(draft)
+  Reporter    Reporter      @relation(fields: [reporterId], references: [id], onDelete: Cascade)
+  reporterId  Int
+  User        User          @relation(fields: [addedBy], references: [id], onDelete: SetDefault)
+  addedBy     Int
+  lastUpdated DateTime      @default(now())
+}
+
+// Video content tags
+model VideoTags {
+  id         Int        @id @default(autoincrement())
+  Video      Video      @relation(fields: [videoId], references: [id], onDelete: Cascade)
+  videoId    Int
+  ContentTag ContentTag @relation(fields: [tagId], references: [id], onDelete: SetDefault)
+  tagId      Int
+
+  // Housekeeping fields
+  status      ContentStatus @default(draft)
+  Reporter    Reporter      @relation(fields: [reporterId], references: [id], onDelete: Cascade)
+  reporterId  Int
+  User        User          @relation(fields: [addedBy], references: [id], onDelete: SetDefault)
+  addedBy     Int
+  lastUpdated DateTime      @default(now())
+}
+
+// Website content tags
+model WebsiteTags {
+  id         Int        @id @default(autoincrement())
+  Website    Website    @relation(fields: [websiteId], references: [id], onDelete: Cascade)
+  websiteId  Int
+  ContentTag ContentTag @relation(fields: [tagId], references: [id], onDelete: SetDefault)
+  tagId      Int
+
+  // Housekeeping fields
+  status      ContentStatus @default(draft)
+  Reporter    Reporter      @relation(fields: [reporterId], references: [id], onDelete: Cascade)
+  reporterId  Int
+  User        User          @relation(fields: [addedBy], references: [id], onDelete: SetDefault)
+  addedBy     Int
+  lastUpdated DateTime      @default(now())
 }

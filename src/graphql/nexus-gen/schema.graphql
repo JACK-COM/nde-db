@@ -2,6 +2,13 @@
 ### Do not make changes to this file directly
 
 
+"""Determines content visibility for end-users."""
+enum ContentStatus {
+  draft
+  live
+  quarantined
+}
+
 """UTC Date-time"""
 scalar CsDateTime
 
@@ -9,9 +16,17 @@ type Query {
   ok: Boolean!
 }
 
-"""Vague measure of pressure in system"""
-enum Temperature {
-  cool
-  hot
-  warm
+"""Describes a type of EXPERIENCE reporter"""
+enum ReporterType {
+  experiencer
+  observer
+  researcher
+}
+
+"""Roles assigned to data readers/writers"""
+enum UserRoles {
+  admin
+  dataentry
+  moderator
+  researcher
 }
