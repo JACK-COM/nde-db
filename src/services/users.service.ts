@@ -1,6 +1,6 @@
 import { Prisma, User } from "@prisma/client";
 import { DateTime } from "luxon";
-import { context } from "graphql/context";
+import { context } from "../graphql/context";
 
 type CreateUserInput = Prisma.UserCreateInput;
 type SearchUserInput = Pick<CreateUserInput, "email">;
@@ -17,10 +17,6 @@ export async function upsertUser(newUser: CreateUserInput) {
     lastSeen: today
   };
 
-  ["email", "role"].forEach((k) => {
-    if (!data[k]) throw new Error(`Missing required field ${k}`);
-  });
-
   return UserDB.upsert({
     create: data,
     update: data,
@@ -34,11 +30,23 @@ export async function findAllUser(where: SearchUserInput) {
 }
 
 /** find one user record matching params */
-export async function getUserById(where: UserByIdInput) {
+export async function getUser(where: UserByIdInput | SearchUserInput) {
   return UserDB.findUnique({ where });
 }
 
+/** update one user record matching params */
+export async function updateUser(where: UserByIdInput | SearchUserInput) {
+  const user = await UserDB.findUnique({ where });
+  if (!user) return null;
+
+  const lastSeen = DateTime.now().toISO();
+  return UserDB.update({ data: { ...user, lastSeen }, where });
+}
+
 /** delete user record matching params */
-export function deleteUser(where: UserByIdInput) {
-  return UserDB.delete({ where });
+export async function deleteUser(where: UserByIdInput) {
+  const exists = await getUser(where);
+  if (!exists) return null;
+  await UserDB.delete({ where });
+  return exists;
 }

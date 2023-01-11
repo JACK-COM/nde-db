@@ -1,42 +1,35 @@
 import express from "express";
-import GoogleStrategy from "passport-google-oidc";
-import { context, passport } from "../graphql/context";
-
-const clientID = process.env.GOOGLE_CLIENT_ID;
-const clientSecret = process.env.GOOGLE_CLIENT_SK;
-const PORT = process.env.PORT;
-export const redirectURL = "oauth2/redirect/google";
-const callbackURL = `http://localhost:${PORT}/${redirectURL}`;
-
-passport.use(
-  new GoogleStrategy({ clientID, clientSecret, callbackURL }, function verify(
-    issuer,
-    profile,
-    cb
-  ) {
-    console.log(issuer, profile);
-    cb(null, profile.email);
-  })
-);
-
-export async function login() {
-  return passport.authenticate("google", { scope: ["email"] });
-}
-
-export async function loginRedirect(_req, res) {
-  res.send("You logged in, buddeh");
-}
+import passport from "../services/passport";
 
 const AuthRouter = express.Router();
-// AuthRouter.post("/signup", signUp);
-AuthRouter.get("/login", login);
+
+// AUTH ROUTES
+const GOOGLE_LOGIN = "/login/google";
+const GOOGLE_LOGOUT = "/logout/google";
+const GOOGLE_LOGIN_REDIRECT = "/oauth2/redirect/google";
+
+// Trigger "Sign in with Google"
 AuthRouter.get(
-  `/${redirectURL}`,
-  passport.authenticate("google", {
-    failureRedirect: "/login",
-    failureMessage: true
-  }),
-  loginRedirect
+  GOOGLE_LOGIN,
+  passport.authenticate("google", { scope: ["email"] })
 );
+
+// Complete "Sign in with google"
+const opts = { failureRedirect: GOOGLE_LOGIN, failureMessage: true };
+AuthRouter.get(
+  GOOGLE_LOGIN_REDIRECT,
+  passport.authenticate("google", opts),
+  function googleRedirect(_req, res) {
+    res.json({ message: "You logged in, buddeh" });
+  }
+);
+
+// Logout
+AuthRouter.get(GOOGLE_LOGOUT, function (req, res, next) {
+  req.logout(function (err) {
+    if (err) return next(err);
+    res.redirect(GOOGLE_LOGIN);
+  });
+});
 
 export default AuthRouter;

@@ -6,9 +6,10 @@ import morgan from "morgan";
 import { rateLimit } from "express-rate-limit";
 import { ApolloServer } from "apollo-server-express";
 import { schema } from "./graphql/index";
-import { context, passport } from "./graphql/context";
+import { context } from "./graphql/context";
 import logger from "./logger";
 import AuthRouter from "./routes/auth.router";
+import passport from "./services/passport";
 
 /** Run server */
 async function main() {
