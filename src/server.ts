@@ -8,6 +8,7 @@ import { ApolloServer } from "apollo-server-express";
 import { schema } from "./graphql/index";
 import { context, passport } from "./graphql/context";
 import logger from "./logger";
+import AuthRouter from "./routes/auth.router";
 
 /** Run server */
 async function main() {
@@ -34,6 +35,8 @@ async function main() {
   app.use(session({ secret, resave: false, saveUninitialized: true }));
   app.use(passport.initialize());
   app.use(passport.session());
+
+  app.use("/", AuthRouter);
 
   if (env === "production") {
     const message = "Too many requests; please try again later";

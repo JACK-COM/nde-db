@@ -48,6 +48,7 @@ export interface NexusGenScalars {
 }
 
 export interface NexusGenObjects {
+  Mutation: {};
   NDBook: { // root type
     addedBy: number; // Int!
     id?: string | null; // ID
@@ -133,6 +134,9 @@ export type NexusGenRootTypes = NexusGenObjects
 export type NexusGenAllTypes = NexusGenRootTypes & NexusGenScalars & NexusGenEnums
 
 export interface NexusGenFieldTypes {
+  Mutation: { // field return type
+    createReporter: NexusGenRootTypes['NDReporter'] | null; // NDReporter
+  }
   NDBook: { // field return type
     addedBy: number; // Int!
     id: string | null; // ID
@@ -210,6 +214,9 @@ export interface NexusGenFieldTypes {
 }
 
 export interface NexusGenFieldTypeNames {
+  Mutation: { // field return type name
+    createReporter: 'NDReporter'
+  }
   NDBook: { // field return type name
     addedBy: 'Int'
     id: 'ID'

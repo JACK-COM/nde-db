@@ -5,10 +5,10 @@
 export * from "./enums";
 
 export * from "./NDBook";
-export * from "./NDVideo";
-export * from "./NDWebsite";
 export * from "./NDDateTime";
 export * from "./NDReporter";
+export * from "./NDVideo";
+export * from "./NDWebsite";
 
 export * from "./NDBookTag";
 export * from "./NDContentTag";

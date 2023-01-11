@@ -9,6 +9,10 @@ enum ContentStatus {
   quarantined
 }
 
+type Mutation {
+  createReporter: NDReporter
+}
+
 """A book detailing one or more EXPERIENCEs"""
 type NDBook {
   """User that added this recordd"""
