@@ -1,6 +1,6 @@
 import { PrismaClient, User } from "@prisma/client";
 
-export type CtxUser = Pick<User, "id" | "role" | "lastSeen">;
+export type CtxUser = Pick<User, "id" | "role" | "email" | "lastSeen">;
 export interface DBContext {
   Books: PrismaClient["book"];
   BookTags: PrismaClient["bookTag"];
@@ -11,7 +11,6 @@ export interface DBContext {
   VideoTags: PrismaClient["videoTag"];
   user?: CtxUser;
 }
-
 
 const db = new PrismaClient();
 export const context: DBContext = {

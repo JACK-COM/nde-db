@@ -6,12 +6,8 @@ const prisma = new PrismaClient();
 const User = prisma.user;
 
 export function verify(req: any, res: any, next: any) {
-  let token: string;
-  token = req.cookies.access_token;
-
-  if (!token) {
-    return res.status(403).send();
-  }
+  const { token } = req.cookies;
+  if (!token) return res.status(403).send();
 
   let payload: void;
   try {
@@ -20,7 +16,7 @@ export function verify(req: any, res: any, next: any) {
       if (err) {
         return res.json({
           success: false,
-          message: "Failed to authenticate token.",
+          message: "Failed to authenticate token."
         });
       } else {
         req.decoded = decoded;
@@ -31,7 +27,7 @@ export function verify(req: any, res: any, next: any) {
     console.log(e);
     res.status(500).send({
       message: e.message || "An error occurred while verifying the token.",
-      payload,
+      payload
     });
   }
 }

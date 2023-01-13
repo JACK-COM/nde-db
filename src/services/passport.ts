@@ -1,9 +1,13 @@
 import { Authenticator, User } from "@prisma/client";
+import { Express } from "express";
 import { DateTime } from "luxon";
-import { Passport } from "passport";
+import cookieParser from "cookie-parser";
+import session, { CookieOptions, SessionOptions } from "express-session";
+import passport from "passport";
 import GoogleStrategy from "passport-google-oidc";
 import { CtxUser } from "../graphql/context";
 import { getUser, upsertUser } from "../services/users.service";
+import configureAuthRoutes from "../routes/auth.router";
 
 type PassportUser = {
   // The provider with which the user authenticated (facebook, twitter, etc.).
@@ -27,51 +31,86 @@ type PassportUser = {
   photos: string[];
 };
 
-const passport = new Passport();
+export default passport;
+
+// const MemoryStore = require("memorystore")(session);
 const clientID = process.env.GOOGLE_CLIENT_ID;
 const clientSecret = process.env.GOOGLE_CLIENT_SK;
 const PORT = process.env.PORT;
 const callbackURL = `http://localhost:${PORT}/oauth2/redirect/google`;
+const maxAge = 86400000; // 24 hours
 const toCtxUser = (u: User): CtxUser => ({
   id: u.id,
+  email: u.email,
   role: u.role,
   lastSeen: DateTime.now().toJSDate()
 });
 
-// Configure Google sign-in strategy
-passport.use(
-  new GoogleStrategy(
-    { clientID, clientSecret, callbackURL },
-    async function verify(
-      issuer: string,
-      profile: PassportUser,
-      cb: (e: Error | string | null, u?: CtxUser) => any
-    ) {
-      // Exit if no emails fetched
-      if (!Array.isArray(profile.emails)) return cb(null, undefined);
+export function configurePassport(app: Express) {
+  const secret = process.env.JWT_SEC;
+  if (!secret) throw new Error("env JWT_SEC not set: run generate-keys");
+  const secure = process.env.NODE_ENV === "production";
+  const sessionCookie: CookieOptions = { maxAge, httpOnly: true, secure };
+  const sessionOpts: SessionOptions = {
+    cookie: sessionCookie,
+    secret,
+    resave: true,
+    saveUninitialized: true
+  };
 
-      // Exit if user exists
-      const [{ value: email }] = profile.emails;
-      const exists = await getUser({ email });
-      if (exists) {
-        console.log({ exists });
-        return cb(null, toCtxUser(exists));
-      }
+  app.use(cookieParser(secret));
+  app.use(session(sessionOpts));
+  app.use(passport.initialize());
+  app.use(passport.session());
 
-      const auth = getAuthIssuer(issuer);
-      const newUser = await upsertUser({ email, auth });
-      console.log({ newUser });
-      return cb(null, toCtxUser(newUser));
-    }
-  )
-);
+  // Serialize authenticated user
+  passport.serializeUser(function serializeUser(user, done) {
+    process.nextTick(function () {
+      console.log("serializeUser", user);
+      return done(null, JSON.stringify(user));
+    });
+  });
 
-// Serialize/deserialize user to persist session. Same function
-// is reused because the user structure is set in `verify`
-passport.serializeUser(_passportForwardUser);
-passport.deserializeUser(_passportForwardUser);
+  // unpack stored user
+  passport.deserializeUser(function deserializeUser(user: string, done) {
+    process.nextTick(function () {
+      console.log("deserializeUser", user);
+      return done(null, JSON.parse(user));
+    });
+  });
 
-export default passport;
+  // Configure Google sign-in strategy
+  passport.use(
+    new GoogleStrategy({ clientID, clientSecret, callbackURL }, verify)
+  );
+
+  configureAuthRoutes(app, passport);
+}
+
+/**
+ * Link social sign-on user to internal account
+ * @param user Authenticated user
+ * @param done Callback function
+ */
+async function verify(
+  issuer: string,
+  profile: PassportUser,
+  cb: (e: Error | string | null, u?: CtxUser) => any
+) {
+  // Exit if no emails fetched from auth
+  if (!Array.isArray(profile.emails)) {
+    const e = new Error("No email fetched from authentication");
+    return cb(e);
+  }
+
+  // Retrieve or create user
+  const [{ value: email }] = profile.emails;
+  const internalUser =
+    (await getUser({ email })) ||
+    (await upsertUser({ email, auth: getAuthIssuer(issuer) }));
+
+  return cb(null, toCtxUser(internalUser));
+}
 
 /**
  * Get `Authenticator` value for auth issuer
@@ -82,15 +121,4 @@ function getAuthIssuer(issuer: string): Authenticator {
   if (issuer.includes("google")) return "google";
   if (issuer.includes("magic")) return "magic";
   return "other";
-}
-
-/**
- * Forward a user for serialize/deserialize operations
- * @param user Authenticated user
- * @param done Callback function
- */
-function _passportForwardUser(user: Express.User, done: (...a: any[]) => any) {
-  process.nextTick(function () {
-    done(null, user);
-  });
 }
