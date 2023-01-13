@@ -5,8 +5,8 @@
 """Determines content visibility for end-users."""
 enum ContentStatus {
   draft
+  hidden
   live
-  quarantined
 }
 
 type Mutation {

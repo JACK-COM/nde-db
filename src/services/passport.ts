@@ -66,7 +66,6 @@ export function configurePassport(app: Express) {
   // Serialize authenticated user
   passport.serializeUser(function serializeUser(user, done) {
     process.nextTick(function () {
-      console.log("serializeUser", user);
       return done(null, JSON.stringify(user));
     });
   });
@@ -74,7 +73,6 @@ export function configurePassport(app: Express) {
   // unpack stored user
   passport.deserializeUser(function deserializeUser(user: string, done) {
     process.nextTick(function () {
-      console.log("deserializeUser", user);
       return done(null, JSON.parse(user));
     });
   });

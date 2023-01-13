@@ -18,7 +18,7 @@ export const ContentStatus = enumType({
   members: {
     live: "live",
     draft: "draft",
-    quarantined: "quarantined"
+    hidden: "hidden"
   }
 });
 

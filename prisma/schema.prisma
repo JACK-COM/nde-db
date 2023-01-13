@@ -25,7 +25,7 @@ enum ReporterType {
 enum ContentStatus {
   live
   draft
-  quarantined
+  hidden
 }
 
 // User roles

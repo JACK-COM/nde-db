@@ -32,7 +32,7 @@ export interface NexusGenInputs {
 }
 
 export interface NexusGenEnums {
-  ContentStatus: "draft" | "live" | "quarantined"
+  ContentStatus: "draft" | "hidden" | "live"
   ReporterType: "experiencer" | "observer" | "researcher"
   UserRoles: "admin" | "dataentry" | "moderator" | "researcher"
   VideoSource: "other" | "vimeo" | "youtube"

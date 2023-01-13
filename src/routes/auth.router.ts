@@ -38,9 +38,7 @@ export default function configureAuthRoutes(
   AuthRouter.get(GOOGLE_LOGOUT, function (req, res, next) {
     req.logout(function (err) {
       if (err) return next(err);
-      req.session.destroy(() =>
-        res.clearCookie("user").clearCookie("token").redirect(UI_REDIRECT)
-      );
+      req.session.destroy(() => res.redirect(UI_REDIRECT));
     });
   });
 
