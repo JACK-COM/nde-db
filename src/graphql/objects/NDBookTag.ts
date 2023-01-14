@@ -5,7 +5,7 @@ export const NDBookTag = objectType({
   name: "NDBookTag",
   description: "Book content tags",
   definition(t) {
-    t.id("id");
+    t.int("id");
     t.nonNull.int("bookId");
     t.nonNull.int("tagId");
     t.nonNull.int("reporterId", { description: "EXPERIENCE reporter" });

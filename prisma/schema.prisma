@@ -101,6 +101,7 @@ model Book {
 // Interviews about a single EXPERIENCE or REPORTER.
 model Video {
   id     Int     @id @default(autoincrement())
+  title  String
   url    String
   source String? // predefined: youtube, vimeo, other
 

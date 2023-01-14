@@ -43,7 +43,7 @@ type NDBookTag {
   """User that added this recordd"""
   addedBy: Int!
   bookId: Int!
-  id: ID
+  id: Int
 
   """Date content was last updated"""
   lastUpdated: NDDateTime
@@ -60,7 +60,7 @@ type NDBookTag {
 type NDContentTag {
   description: String!
   example: String
-  id: ID
+  id: Int
   name: String!
 }
 
@@ -99,6 +99,9 @@ type NDVideo {
 
   """Content visibility status"""
   status: ContentStatus!
+
+  """Video Title"""
+  title: String!
 
   """Video URL"""
   url: String!
@@ -162,7 +165,11 @@ type NDWebsiteTag {
 }
 
 type Query {
-  ok: Boolean!
+  """List Content Tags for a single book"""
+  listBookTags(bookId: Int): [NDBookTag]!
+
+  """List Content Tags (optionally filter by name or description)"""
+  listContentTags(description: String, name: String): [NDContentTag]!
 }
 
 """Describes a type of EXPERIENCE reporter"""

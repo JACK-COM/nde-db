@@ -5,7 +5,7 @@ export const NDContentTag = objectType({
   name: "NDContentTag",
   description: "Labels to identify where a topic is discussed in media",
   definition(t) {
-    t.id("id");
+    t.int("id");
     t.nonNull.string("name");
     t.nonNull.string("description");
     t.string("example");

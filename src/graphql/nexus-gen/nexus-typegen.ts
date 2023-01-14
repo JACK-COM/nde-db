@@ -63,7 +63,7 @@ export interface NexusGenObjects {
     ContentTag?: NexusGenRootTypes['NDContentTag'] | null; // NDContentTag
     addedBy: number; // Int!
     bookId: number; // Int!
-    id?: string | null; // ID
+    id?: number | null; // Int
     lastUpdated?: NexusGenScalars['NDDateTime'] | null; // NDDateTime
     reporterId: number; // Int!
     status: NexusGenEnums['ContentStatus']; // ContentStatus!
@@ -72,7 +72,7 @@ export interface NexusGenObjects {
   NDContentTag: { // root type
     description: string; // String!
     example?: string | null; // String
-    id?: string | null; // ID
+    id?: number | null; // Int
     name: string; // String!
   }
   NDReporter: { // root type
@@ -90,6 +90,7 @@ export interface NexusGenObjects {
     reporterId: number; // Int!
     source?: string | null; // String
     status: NexusGenEnums['ContentStatus']; // ContentStatus!
+    title: string; // String!
     url: string; // String!
   }
   NDVideoTag: { // root type
@@ -151,7 +152,7 @@ export interface NexusGenFieldTypes {
     ContentTag: NexusGenRootTypes['NDContentTag'] | null; // NDContentTag
     addedBy: number; // Int!
     bookId: number; // Int!
-    id: string | null; // ID
+    id: number | null; // Int
     lastUpdated: NexusGenScalars['NDDateTime'] | null; // NDDateTime
     reporterId: number; // Int!
     status: NexusGenEnums['ContentStatus']; // ContentStatus!
@@ -160,7 +161,7 @@ export interface NexusGenFieldTypes {
   NDContentTag: { // field return type
     description: string; // String!
     example: string | null; // String
-    id: string | null; // ID
+    id: number | null; // Int
     name: string; // String!
   }
   NDReporter: { // field return type
@@ -178,6 +179,7 @@ export interface NexusGenFieldTypes {
     reporterId: number; // Int!
     source: string | null; // String
     status: NexusGenEnums['ContentStatus']; // ContentStatus!
+    title: string; // String!
     url: string; // String!
   }
   NDVideoTag: { // field return type
@@ -209,7 +211,8 @@ export interface NexusGenFieldTypes {
     websiteId: number; // Int!
   }
   Query: { // field return type
-    ok: boolean; // Boolean!
+    listBookTags: Array<NexusGenRootTypes['NDBookTag'] | null>; // [NDBookTag]!
+    listContentTags: Array<NexusGenRootTypes['NDContentTag'] | null>; // [NDContentTag]!
   }
 }
 
@@ -231,7 +234,7 @@ export interface NexusGenFieldTypeNames {
     ContentTag: 'NDContentTag'
     addedBy: 'Int'
     bookId: 'Int'
-    id: 'ID'
+    id: 'Int'
     lastUpdated: 'NDDateTime'
     reporterId: 'Int'
     status: 'ContentStatus'
@@ -240,7 +243,7 @@ export interface NexusGenFieldTypeNames {
   NDContentTag: { // field return type name
     description: 'String'
     example: 'String'
-    id: 'ID'
+    id: 'Int'
     name: 'String'
   }
   NDReporter: { // field return type name
@@ -258,6 +261,7 @@ export interface NexusGenFieldTypeNames {
     reporterId: 'Int'
     source: 'String'
     status: 'ContentStatus'
+    title: 'String'
     url: 'String'
   }
   NDVideoTag: { // field return type name
@@ -289,11 +293,21 @@ export interface NexusGenFieldTypeNames {
     websiteId: 'Int'
   }
   Query: { // field return type name
-    ok: 'Boolean'
+    listBookTags: 'NDBookTag'
+    listContentTags: 'NDContentTag'
   }
 }
 
 export interface NexusGenArgTypes {
+  Query: {
+    listBookTags: { // args
+      bookId?: number | null; // Int
+    }
+    listContentTags: { // args
+      description?: string | null; // String
+      name?: string | null; // String
+    }
+  }
 }
 
 export interface NexusGenAbstractTypeMembers {

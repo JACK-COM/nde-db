@@ -6,6 +6,7 @@ export const NDVideo = objectType({
   description: "Interviews about a single EXPERIENCE or REPORTER.",
   definition(t) {
     t.id("id");
+    t.nonNull.string("title", { description: "Video Title" });
     t.nonNull.string("url", { description: "Video URL" });
     t.string("source", { description: "youtube | vimeo | other" });
     t.nonNull.int("reporterId", { description: "EXPERIENCE reporter" });
