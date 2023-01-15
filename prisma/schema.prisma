@@ -72,6 +72,7 @@ model Reporter {
   status      ContentStatus @default(draft)
   User        User          @relation(fields: [addedBy], references: [id], onDelete: SetDefault)
   addedBy     Int
+  added       DateTime?     @default(now())
   lastUpdated DateTime?     @default(now())
   Book        Book[]
   Video       Video[]
@@ -94,6 +95,7 @@ model Book {
   status      ContentStatus @default(draft)
   User        User          @relation(fields: [addedBy], references: [id], onDelete: SetDefault)
   addedBy     Int
+  added       DateTime?     @default(now())
   lastUpdated DateTime      @default(now())
   BookTag     BookTag[]
 }
@@ -111,6 +113,7 @@ model Video {
   status      ContentStatus @default(draft)
   User        User          @relation(fields: [addedBy], references: [id], onDelete: SetDefault)
   addedBy     Int
+  added       DateTime?     @default(now())
   lastUpdated DateTime      @default(now())
   VideoTag    VideoTag[]
 }
@@ -126,6 +129,7 @@ model Website {
   status      ContentStatus @default(draft)
   User        User          @relation(fields: [addedBy], references: [id], onDelete: SetDefault)
   addedBy     Int
+  added       DateTime?     @default(now())
   lastUpdated DateTime      @default(now())
   WebsiteTag  WebsiteTag[]
 }
@@ -144,6 +148,7 @@ model BookTag {
   reporterId  Int
   User        User          @relation(fields: [addedBy], references: [id], onDelete: SetDefault)
   addedBy     Int
+  added       DateTime?     @default(now())
   lastUpdated DateTime      @default(now())
 }
 
@@ -154,6 +159,7 @@ model VideoTag {
   videoId    Int
   ContentTag ContentTag @relation(fields: [tagId], references: [id], onDelete: SetDefault)
   tagId      Int
+  timestamp  String     @default("00:00:00")
 
   // Housekeeping fields
   status      ContentStatus @default(draft)
@@ -161,6 +167,7 @@ model VideoTag {
   reporterId  Int
   User        User          @relation(fields: [addedBy], references: [id], onDelete: SetDefault)
   addedBy     Int
+  added       DateTime?     @default(now())
   lastUpdated DateTime      @default(now())
 }
 
@@ -178,5 +185,6 @@ model WebsiteTag {
   reporterId  Int
   User        User          @relation(fields: [addedBy], references: [id], onDelete: SetDefault)
   addedBy     Int
+  added       DateTime?     @default(now())
   lastUpdated DateTime      @default(now())
 }

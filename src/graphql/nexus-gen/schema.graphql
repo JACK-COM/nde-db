@@ -16,7 +16,7 @@ input CreateContentTagInput {
 }
 
 type Mutation {
-  createContentTags(addedBy: Int!, data: [CreateContentTagInput]): [NDContentTag]
+  createContentTags(data: [CreateContentTagInput]): [NDContentTag]
   createReporter: NDReporter
 }
 
@@ -131,6 +131,7 @@ type NDVideoTag {
   """Content visibility status"""
   status: ContentStatus!
   tagId: Int!
+  timestamp: String
   videoId: Int!
 }
 

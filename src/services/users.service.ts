@@ -43,17 +43,25 @@ export async function updateUser(where: UserByIdInput | SearchUserInput) {
   return UserDB.update({ data: { ...user, lastSeen }, where });
 }
 
-/** delete user record matching params */
+/** Require user `id` to match or exceed role `role` */
 export async function requireRole(id: UserByIdInput["id"], role: User["role"]) {
   const { role: userRole } = (await getUser({ id })) || { role: "researcher" };
-  const ranks: User["role"][] = [
-    "researcher",
-    "dataentry",
-    "moderator",
-    "admin"
-  ];
+  return rankUserRoles(userRole, role);
+}
 
-  return ranks.indexOf(userRole) >= ranks.indexOf(role);
+const roleRanks: User["role"][] = [
+  "researcher",
+  "dataentry",
+  "moderator",
+  "admin"
+];
+
+/** Check whether `userRole` matches or exceeds `ref` */
+export function rankUserRoles(
+  userRole?: User["role"],
+  ref: User["role"] = "moderator"
+) {
+  return roleRanks.indexOf(userRole || "researcher") >= roleRanks.indexOf(ref);
 }
 
 /** delete user record matching params */

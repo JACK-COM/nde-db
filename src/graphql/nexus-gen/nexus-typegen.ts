@@ -106,6 +106,7 @@ export interface NexusGenObjects {
     reporterId: number; // Int!
     status: NexusGenEnums['ContentStatus']; // ContentStatus!
     tagId: number; // Int!
+    timestamp?: string | null; // String
     videoId: number; // Int!
   }
   NDWebsite: { // root type
@@ -196,6 +197,7 @@ export interface NexusGenFieldTypes {
     reporterId: number; // Int!
     status: NexusGenEnums['ContentStatus']; // ContentStatus!
     tagId: number; // Int!
+    timestamp: string | null; // String
     videoId: number; // Int!
   }
   NDWebsite: { // field return type
@@ -279,6 +281,7 @@ export interface NexusGenFieldTypeNames {
     reporterId: 'Int'
     status: 'ContentStatus'
     tagId: 'Int'
+    timestamp: 'String'
     videoId: 'Int'
   }
   NDWebsite: { // field return type name
@@ -308,7 +311,6 @@ export interface NexusGenFieldTypeNames {
 export interface NexusGenArgTypes {
   Mutation: {
     createContentTags: { // args
-      addedBy: number; // Int!
       data?: Array<NexusGenInputs['CreateContentTagInput'] | null> | null; // [CreateContentTagInput]
     }
   }

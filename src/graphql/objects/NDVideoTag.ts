@@ -16,6 +16,7 @@ export const NDVideoTag = objectType({
       type: "ContentStatus",
       description: "Content visibility status"
     });
+    t.string("timestamp");
     t.field("lastUpdated", {
       type: "NDDateTime",
       description: "Date content was last updated"

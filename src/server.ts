@@ -1,5 +1,7 @@
 import "graphql-import-node";
 import { ApolloServer } from "apollo-server-express";
+// import { expressMiddleware } from '@apollo/server/express4';
+import { json } from "body-parser";
 import express, { Express } from "express";
 import { rateLimit } from "express-rate-limit";
 import cors from "cors";
@@ -15,25 +17,30 @@ const env = process.env.NODE_ENV || "development";
 /** Run server */
 async function main() {
   const app = express();
-  app.set("trust proxy", 1);
+  app.set("trust proxy", env !== "production");
 
   app.use(morgan("dev"));
   app.use(express.json());
   app.use(express.urlencoded({ extended: false }));
-  app.use(cors({ credentials: true, origin: "http://localhost:3000" }));
+
+  const origin = ["http://localhost:3000", "https://studio.apollographql.com"];
+  app.use("*", cors({ credentials: true, origin }), json());
 
   configureRateLimiter(app); // rate Limiter
   configurePassport(app); // passportjs
 
+  // APOLLO SERVER
   const apolloServer = new ApolloServer({
     context: ({ req }) => ({ ...context, user: req.user }),
     schema,
     cache: "bounded",
-    persistedQueries: false
+    persistedQueries: false,
+    logger
   });
   await apolloServer.start();
-  apolloServer.applyMiddleware({ app });
+  apolloServer.applyMiddleware({ app, cors: { credentials: true, origin } });
 
+  // LISTEN TO APP
   app.listen(PORT, async () => {
     let live = "LIVE";
     if (env !== "production") {
