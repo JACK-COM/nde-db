@@ -17,24 +17,21 @@ async function main() {
   const app = express();
   app.set("trust proxy", 1);
 
+  app.use(morgan("dev"));
+  app.use(express.json());
+  app.use(express.urlencoded({ extended: false }));
+  app.use(cors({ credentials: true, origin: "http://localhost:3000" }));
+
+  configureRateLimiter(app); // rate Limiter
+  configurePassport(app); // passportjs
+
   const apolloServer = new ApolloServer({
     context: ({ req }) => ({ ...context, user: req.user }),
     schema,
     cache: "bounded",
     persistedQueries: false
   });
-
   await apolloServer.start();
-  apolloServer.applyMiddleware({ app });
-
-  app.use(morgan("dev"));
-  app.use(express.json());
-  app.use(express.urlencoded({ extended: false }));
-  app.use(cors({ credentials: true, origin: 'http://localhost:3000' }));
-
-  configureRateLimiter(app); // rate Limiter
-  configurePassport(app); // passportjs
-
   apolloServer.applyMiddleware({ app });
 
   app.listen(PORT, async () => {

@@ -44,6 +44,19 @@ export async function updateUser(where: UserByIdInput | SearchUserInput) {
 }
 
 /** delete user record matching params */
+export async function requireRole(id: UserByIdInput["id"], role: User["role"]) {
+  const { role: userRole } = (await getUser({ id })) || { role: "researcher" };
+  const ranks: User["role"][] = [
+    "researcher",
+    "dataentry",
+    "moderator",
+    "admin"
+  ];
+
+  return ranks.indexOf(userRole) >= ranks.indexOf(role);
+}
+
+/** delete user record matching params */
 export async function deleteUser(where: UserByIdInput) {
   const exists = await getUser(where);
   if (!exists) return null;

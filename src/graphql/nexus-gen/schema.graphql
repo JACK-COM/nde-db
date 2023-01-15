@@ -9,7 +9,14 @@ enum ContentStatus {
   live
 }
 
+input CreateContentTagInput {
+  description: String!
+  example: String
+  name: String!
+}
+
 type Mutation {
+  createContentTags(addedBy: Int!, data: [CreateContentTagInput]): [NDContentTag]
   createReporter: NDReporter
 }
 

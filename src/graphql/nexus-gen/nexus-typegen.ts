@@ -29,6 +29,11 @@ declare global {
 }
 
 export interface NexusGenInputs {
+  CreateContentTagInput: { // input type
+    description: string; // String!
+    example?: string | null; // String
+    name: string; // String!
+  }
 }
 
 export interface NexusGenEnums {
@@ -136,6 +141,7 @@ export type NexusGenAllTypes = NexusGenRootTypes & NexusGenScalars & NexusGenEnu
 
 export interface NexusGenFieldTypes {
   Mutation: { // field return type
+    createContentTags: Array<NexusGenRootTypes['NDContentTag'] | null> | null; // [NDContentTag]
     createReporter: NexusGenRootTypes['NDReporter'] | null; // NDReporter
   }
   NDBook: { // field return type
@@ -218,6 +224,7 @@ export interface NexusGenFieldTypes {
 
 export interface NexusGenFieldTypeNames {
   Mutation: { // field return type name
+    createContentTags: 'NDContentTag'
     createReporter: 'NDReporter'
   }
   NDBook: { // field return type name
@@ -299,6 +306,12 @@ export interface NexusGenFieldTypeNames {
 }
 
 export interface NexusGenArgTypes {
+  Mutation: {
+    createContentTags: { // args
+      addedBy: number; // Int!
+      data?: Array<NexusGenInputs['CreateContentTagInput'] | null> | null; // [CreateContentTagInput]
+    }
+  }
   Query: {
     listBookTags: { // args
       bookId?: number | null; // Int
@@ -318,7 +331,7 @@ export interface NexusGenTypeInterfaces {
 
 export type NexusGenObjectNames = keyof NexusGenObjects;
 
-export type NexusGenInputNames = never;
+export type NexusGenInputNames = keyof NexusGenInputs;
 
 export type NexusGenEnumNames = keyof NexusGenEnums;
 

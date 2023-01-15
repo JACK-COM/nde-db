@@ -1,7 +1,12 @@
-/**
- * @module Inputs
- *
- * Define inputs for `mutations` and `queries` in this directory
- */
+/** @module Inputs */
 
-export {};
+import { inputObjectType } from "nexus";
+
+export const CreateContentTagInput = inputObjectType({
+  name: "CreateContentTagInput",
+  definition(t) {
+    t.nonNull.string("name");
+    t.nonNull.string("description");
+    t.string("example");
+  }
+});
