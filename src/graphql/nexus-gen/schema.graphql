@@ -15,10 +15,16 @@ input CreateContentTagInput {
   name: String!
 }
 
+input CreateReporterInput {
+  name: String!
+  type: ReporterType!
+}
+
 type Mutation {
   createContentTags(data: [CreateContentTagInput]!): [NDContentTag]
-  createReporter: NDReporter
+  createReporters(data: [CreateReporterInput]!): [NDReporter]
   updateContentTags(data: [UpdateContentTagInput]!): [NDContentTag]
+  updateReporters(data: [UpdateReporterInput]!): [NDReporter]
 }
 
 """A book detailing one or more EXPERIENCEs"""
@@ -79,7 +85,7 @@ scalar NDDateTime
 type NDReporter {
   """User that added this recordd"""
   addedBy: Int!
-  id: ID
+  id: Int
 
   """Date content was last updated"""
   lastUpdated: NDDateTime
@@ -179,6 +185,9 @@ type Query {
 
   """List Content Tags (optionally filter by name or description)"""
   listContentTags(description: String, name: String): [NDContentTag]!
+
+  """List Content Tags for a single book"""
+  listReporters(name: String, type: ReporterType): [NDReporter]!
 }
 
 """Describes a type of EXPERIENCE reporter"""
@@ -193,6 +202,12 @@ input UpdateContentTagInput {
   example: String
   id: Int!
   name: String
+}
+
+input UpdateReporterInput {
+  id: Int!
+  name: String!
+  type: ReporterType!
 }
 
 """Roles assigned to data readers/writers"""

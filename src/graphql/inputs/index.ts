@@ -2,6 +2,8 @@
 
 import { inputObjectType } from "nexus";
 
+/* CONTENT TAGS */
+
 export const CreateContentTagInput = inputObjectType({
   name: "CreateContentTagInput",
   definition(t) {
@@ -11,7 +13,6 @@ export const CreateContentTagInput = inputObjectType({
   }
 });
 
-
 export const UpdateContentTagInput = inputObjectType({
   name: "UpdateContentTagInput",
   definition(t) {
@@ -19,5 +20,24 @@ export const UpdateContentTagInput = inputObjectType({
     t.string("name");
     t.string("description");
     t.string("example");
+  }
+});
+
+/* REPORTERS */
+
+export const CreateReporterInput = inputObjectType({
+  name: "CreateReporterInput",
+  definition(t) {
+    t.nonNull.string("name");
+    t.nonNull.field({ name: "type", type: "ReporterType" });
+  }
+});
+
+export const UpdateReporterInput = inputObjectType({
+  name: "UpdateReporterInput",
+  definition(t) {
+    t.nonNull.int("id");
+    t.nonNull.string("name");
+    t.nonNull.field({ name: "type", type: "ReporterType" });
   }
 });

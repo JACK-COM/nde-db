@@ -75,7 +75,7 @@ model Reporter {
   status      ContentStatus @default(draft)
   User        User          @relation(fields: [addedBy], references: [id], onDelete: SetDefault)
   addedBy     Int
-  added       DateTime?     @default(now())
+  created     DateTime?     @default(now())
   lastUpdated DateTime?     @default(now())
   Book        Book[]
   Video       Video[]

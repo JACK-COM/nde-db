@@ -5,6 +5,7 @@ import {
   CreateTagInput
 } from "../../services/content-tags.service";
 import { isAuthorized } from "../../services/users.service";
+import { withCreator } from "../../services/utils";
 
 export const createContentTags = mutationField("createContentTags", {
   type: list("NDContentTag"),
@@ -30,16 +31,3 @@ export const updateContentTags = mutationField("updateContentTags", {
     return upsertMultipleTags(input);
   }
 });
-
-function withCreator<T>(d: T, userId: number, newItems = false) {
-  type EnhancedInput = T & { addedBy: number; lastUpdated: Date };
-  const lastUpdated = new Date();
-  const appendCreator = (i: T): EnhancedInput => ({
-    ...i,
-    addedBy: userId,
-    lastUpdated,
-    created: newItems ? lastUpdated : undefined
-  });
-
-  return (Array.isArray(d) ? d.map(appendCreator) : appendCreator(d)) as T;
-}

@@ -34,11 +34,20 @@ export interface NexusGenInputs {
     example?: string | null; // String
     name: string; // String!
   }
+  CreateReporterInput: { // input type
+    name: string; // String!
+    type: NexusGenEnums['ReporterType']; // ReporterType!
+  }
   UpdateContentTagInput: { // input type
     description?: string | null; // String
     example?: string | null; // String
     id: number; // Int!
     name?: string | null; // String
+  }
+  UpdateReporterInput: { // input type
+    id: number; // Int!
+    name: string; // String!
+    type: NexusGenEnums['ReporterType']; // ReporterType!
   }
 }
 
@@ -88,7 +97,7 @@ export interface NexusGenObjects {
   }
   NDReporter: { // root type
     addedBy: number; // Int!
-    id?: string | null; // ID
+    id?: number | null; // Int
     lastUpdated?: NexusGenScalars['NDDateTime'] | null; // NDDateTime
     name: string; // String!
     status: NexusGenEnums['ContentStatus']; // ContentStatus!
@@ -149,8 +158,9 @@ export type NexusGenAllTypes = NexusGenRootTypes & NexusGenScalars & NexusGenEnu
 export interface NexusGenFieldTypes {
   Mutation: { // field return type
     createContentTags: Array<NexusGenRootTypes['NDContentTag'] | null> | null; // [NDContentTag]
-    createReporter: NexusGenRootTypes['NDReporter'] | null; // NDReporter
+    createReporters: Array<NexusGenRootTypes['NDReporter'] | null> | null; // [NDReporter]
     updateContentTags: Array<NexusGenRootTypes['NDContentTag'] | null> | null; // [NDContentTag]
+    updateReporters: Array<NexusGenRootTypes['NDReporter'] | null> | null; // [NDReporter]
   }
   NDBook: { // field return type
     addedBy: number; // Int!
@@ -180,7 +190,7 @@ export interface NexusGenFieldTypes {
   }
   NDReporter: { // field return type
     addedBy: number; // Int!
-    id: string | null; // ID
+    id: number | null; // Int
     lastUpdated: NexusGenScalars['NDDateTime'] | null; // NDDateTime
     name: string; // String!
     status: NexusGenEnums['ContentStatus']; // ContentStatus!
@@ -228,14 +238,16 @@ export interface NexusGenFieldTypes {
   Query: { // field return type
     listBookTags: Array<NexusGenRootTypes['NDBookTag'] | null>; // [NDBookTag]!
     listContentTags: Array<NexusGenRootTypes['NDContentTag'] | null>; // [NDContentTag]!
+    listReporters: Array<NexusGenRootTypes['NDReporter'] | null>; // [NDReporter]!
   }
 }
 
 export interface NexusGenFieldTypeNames {
   Mutation: { // field return type name
     createContentTags: 'NDContentTag'
-    createReporter: 'NDReporter'
+    createReporters: 'NDReporter'
     updateContentTags: 'NDContentTag'
+    updateReporters: 'NDReporter'
   }
   NDBook: { // field return type name
     addedBy: 'Int'
@@ -265,7 +277,7 @@ export interface NexusGenFieldTypeNames {
   }
   NDReporter: { // field return type name
     addedBy: 'Int'
-    id: 'ID'
+    id: 'Int'
     lastUpdated: 'NDDateTime'
     name: 'String'
     status: 'ContentStatus'
@@ -313,6 +325,7 @@ export interface NexusGenFieldTypeNames {
   Query: { // field return type name
     listBookTags: 'NDBookTag'
     listContentTags: 'NDContentTag'
+    listReporters: 'NDReporter'
   }
 }
 
@@ -321,8 +334,14 @@ export interface NexusGenArgTypes {
     createContentTags: { // args
       data: Array<NexusGenInputs['CreateContentTagInput'] | null>; // [CreateContentTagInput]!
     }
+    createReporters: { // args
+      data: Array<NexusGenInputs['CreateReporterInput'] | null>; // [CreateReporterInput]!
+    }
     updateContentTags: { // args
       data: Array<NexusGenInputs['UpdateContentTagInput'] | null>; // [UpdateContentTagInput]!
+    }
+    updateReporters: { // args
+      data: Array<NexusGenInputs['UpdateReporterInput'] | null>; // [UpdateReporterInput]!
     }
   }
   Query: {
@@ -332,6 +351,10 @@ export interface NexusGenArgTypes {
     listContentTags: { // args
       description?: string | null; // String
       name?: string | null; // String
+    }
+    listReporters: { // args
+      name?: string | null; // String
+      type?: NexusGenEnums['ReporterType'] | null; // ReporterType
     }
   }
 }

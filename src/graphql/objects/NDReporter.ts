@@ -5,7 +5,7 @@ export const NDReporter = objectType({
   name: "NDReporter",
   description: "An individual that reports an EXPERIENCE",
   definition(t) {
-    t.id("id");
+    t.int("id");
     t.nonNull.string("name");
     t.nonNull.field("type", { type: "ReporterType" });
     t.nonNull.int("addedBy", {
