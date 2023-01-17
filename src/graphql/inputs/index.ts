@@ -10,3 +10,14 @@ export const CreateContentTagInput = inputObjectType({
     t.string("example");
   }
 });
+
+
+export const UpdateContentTagInput = inputObjectType({
+  name: "UpdateContentTagInput",
+  definition(t) {
+    t.nonNull.int("id");
+    t.string("name");
+    t.string("description");
+    t.string("example");
+  }
+});

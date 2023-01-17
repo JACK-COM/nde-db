@@ -16,8 +16,9 @@ input CreateContentTagInput {
 }
 
 type Mutation {
-  createContentTags(data: [CreateContentTagInput]): [NDContentTag]
+  createContentTags(data: [CreateContentTagInput]!): [NDContentTag]
   createReporter: NDReporter
+  updateContentTags(data: [UpdateContentTagInput]!): [NDContentTag]
 }
 
 """A book detailing one or more EXPERIENCEs"""
@@ -185,6 +186,13 @@ enum ReporterType {
   experiencer
   observer
   researcher
+}
+
+input UpdateContentTagInput {
+  description: String
+  example: String
+  id: Int!
+  name: String
 }
 
 """Roles assigned to data readers/writers"""

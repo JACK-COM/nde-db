@@ -59,6 +59,9 @@ model ContentTag {
   name        String
   description String
   example     String?
+  addedBy     Int
+  created     DateTime
+  lastUpdated DateTime
   BookTag     BookTag[]
   VideoTag    VideoTag[]
   WebsiteTag  WebsiteTag[]

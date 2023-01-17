@@ -2,14 +2,20 @@ import { ContentTag, Prisma } from "@prisma/client";
 import { context } from "../graphql/context";
 
 export type CreateTagInput = Prisma.ContentTagCreateInput & { id?: number };
+export type UpdateTagInput = Prisma.ContentTagUpdateArgs["data"];
 export type SearchTagInput = Pick<CreateTagInput, "name" | "description">;
 export type TagByIdInput = Pick<ContentTag, "id">;
 const { ContentTags: Tags } = context;
 
 /** create multiple content tags */
-export async function createMultipleTags(data: CreateTagInput[]) {
-  // Tags.createMany({ data, skipDuplicates: true })
-  return await Promise.all(data.map((d) => Tags.create({ data: d })));
+export async function upsertMultipleTags(data: CreateTagInput[]) {
+  return await Promise.all(
+    data.map((d) =>
+      d.id
+        ? Tags.update({ data: d, where: { id: d.id } })
+        : Tags.create({ data: d })
+    )
+  );
 }
 
 /** create content tag */

@@ -34,6 +34,12 @@ export interface NexusGenInputs {
     example?: string | null; // String
     name: string; // String!
   }
+  UpdateContentTagInput: { // input type
+    description?: string | null; // String
+    example?: string | null; // String
+    id: number; // Int!
+    name?: string | null; // String
+  }
 }
 
 export interface NexusGenEnums {
@@ -144,6 +150,7 @@ export interface NexusGenFieldTypes {
   Mutation: { // field return type
     createContentTags: Array<NexusGenRootTypes['NDContentTag'] | null> | null; // [NDContentTag]
     createReporter: NexusGenRootTypes['NDReporter'] | null; // NDReporter
+    updateContentTags: Array<NexusGenRootTypes['NDContentTag'] | null> | null; // [NDContentTag]
   }
   NDBook: { // field return type
     addedBy: number; // Int!
@@ -228,6 +235,7 @@ export interface NexusGenFieldTypeNames {
   Mutation: { // field return type name
     createContentTags: 'NDContentTag'
     createReporter: 'NDReporter'
+    updateContentTags: 'NDContentTag'
   }
   NDBook: { // field return type name
     addedBy: 'Int'
@@ -311,7 +319,10 @@ export interface NexusGenFieldTypeNames {
 export interface NexusGenArgTypes {
   Mutation: {
     createContentTags: { // args
-      data?: Array<NexusGenInputs['CreateContentTagInput'] | null> | null; // [CreateContentTagInput]
+      data: Array<NexusGenInputs['CreateContentTagInput'] | null>; // [CreateContentTagInput]!
+    }
+    updateContentTags: { // args
+      data: Array<NexusGenInputs['UpdateContentTagInput'] | null>; // [UpdateContentTagInput]!
     }
   }
   Query: {

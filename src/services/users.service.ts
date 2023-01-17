@@ -46,7 +46,7 @@ export async function updateUser(where: UserByIdInput | SearchUserInput) {
 /** Require user `id` to match or exceed role `role` */
 export async function requireRole(id: UserByIdInput["id"], role: User["role"]) {
   const { role: userRole } = (await getUser({ id })) || { role: "researcher" };
-  return rankUserRoles(userRole, role);
+  return isAuthorized(userRole, role);
 }
 
 const roleRanks: User["role"][] = [
@@ -57,7 +57,7 @@ const roleRanks: User["role"][] = [
 ];
 
 /** Check whether `userRole` matches or exceeds `ref` */
-export function rankUserRoles(
+export function isAuthorized(
   userRole?: User["role"],
   ref: User["role"] = "moderator"
 ) {
