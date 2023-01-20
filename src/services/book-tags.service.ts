@@ -1,5 +1,6 @@
 import { BookTag, Prisma } from "@prisma/client";
 import { context } from "../graphql/context";
+import { falsy } from "./utils";
 
 type CreateTagInput = Prisma.BookTagUncheckedCreateInput & { id?: number };
 type SearchTagInput = Pick<
@@ -11,7 +12,13 @@ const { BookTags: Tags } = context;
 
 /** create multiple book tags */
 export async function createMultipleTags(data: CreateTagInput[]) {
-  return Tags.createMany({ data });
+  return await Promise.all(
+    data.map((d) =>
+      falsy.includes(d.id)
+        ? Tags.create({ data: d })
+        : Tags.update({ data: d, where: { id: d.id } })
+    )
+  );
 }
 
 /** create book tag */

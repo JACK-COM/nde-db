@@ -11,7 +11,8 @@ export const createReporters = mutationField("createReporters", {
   args: { data: nonNull(arg({ type: list("CreateReporterInput") })) },
   async resolve(_, args, { user }) {
     const { data } = args;
-    if (!user || !isAuthorized(user?.role, "admin") || !data.length) return [];
+    if (!user || !isAuthorized(user?.role, "dataentry") || !data.length)
+      return [];
     const input = withCreator(data, user.id, true) as CreateReporterInput[];
     return upsertMultipleReporters(input).catch((e) => {
       console.log(e);
@@ -25,7 +26,7 @@ export const updateReporters = mutationField("updateReporters", {
   args: { data: arg({ type: nonNull(list("UpdateReporterInput")) }) },
   async resolve(_, args, { user }) {
     const { data } = args;
-    if (!user || !isAuthorized(user?.role, "admin") || !data) return [];
+    if (!user || !isAuthorized(user?.role, "moderator") || !data) return [];
     const input = withCreator(data, user.id) as CreateReporterInput[];
     return upsertMultipleReporters(input);
   }

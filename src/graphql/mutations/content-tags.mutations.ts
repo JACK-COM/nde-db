@@ -1,4 +1,3 @@
-// import logger from "../../logger";
 import { arg, list, mutationField, nonNull } from "nexus";
 import {
   upsertMultipleTags,

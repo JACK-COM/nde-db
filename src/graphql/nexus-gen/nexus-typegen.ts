@@ -38,6 +38,30 @@ export interface NexusGenInputs {
     name: string; // String!
     type: NexusGenEnums['ReporterType']; // ReporterType!
   }
+  CreateVideoInput: { // input type
+    reporterId: number; // Int!
+    source: NexusGenEnums['VideoSource'] | null; // VideoSource
+    title: string; // String!
+    url: string; // String!
+  }
+  TagBookInput: { // input type
+    bookId: number; // Int!
+    id?: number | null; // Int
+    reporterId: number; // Int!
+    tagId: number; // Int!
+  }
+  TagSiteInput: { // input type
+    id?: number | null; // Int
+    reporterId: number; // Int!
+    tagId: number; // Int!
+    websiteId: number; // Int!
+  }
+  TagVideoInput: { // input type
+    reporterId: number; // Int!
+    tagId: number; // Int!
+    timestamp?: string | null; // String
+    videoId: number; // Int!
+  }
   UpdateContentTagInput: { // input type
     description?: string | null; // String
     example?: string | null; // String
@@ -46,8 +70,15 @@ export interface NexusGenInputs {
   }
   UpdateReporterInput: { // input type
     id: number; // Int!
-    name: string; // String!
-    type: NexusGenEnums['ReporterType']; // ReporterType!
+    name?: string | null; // String
+    type?: NexusGenEnums['ReporterType'] | null; // ReporterType
+  }
+  UpdateVideoInput: { // input type
+    id: number; // Int!
+    reporterId?: number | null; // Int
+    source?: NexusGenEnums['VideoSource'] | null; // VideoSource
+    title?: string | null; // String
+    url?: string | null; // String
   }
 }
 
@@ -104,8 +135,9 @@ export interface NexusGenObjects {
     type: NexusGenEnums['ReporterType']; // ReporterType!
   }
   NDVideo: { // root type
+    VideoTag?: Array<NexusGenRootTypes['NDVideoTag'] | null> | null; // [NDVideoTag]
     addedBy: number; // Int!
-    id?: string | null; // ID
+    id?: number | null; // Int
     lastUpdated?: NexusGenScalars['NDDateTime'] | null; // NDDateTime
     reporterId: number; // Int!
     source?: string | null; // String
@@ -116,7 +148,7 @@ export interface NexusGenObjects {
   NDVideoTag: { // root type
     ContentTag?: NexusGenRootTypes['NDContentTag'] | null; // NDContentTag
     addedBy: number; // Int!
-    id?: string | null; // ID
+    id?: number | null; // Int
     lastUpdated?: NexusGenScalars['NDDateTime'] | null; // NDDateTime
     reporterId: number; // Int!
     status: NexusGenEnums['ContentStatus']; // ContentStatus!
@@ -159,8 +191,12 @@ export interface NexusGenFieldTypes {
   Mutation: { // field return type
     createContentTags: Array<NexusGenRootTypes['NDContentTag'] | null> | null; // [NDContentTag]
     createReporters: Array<NexusGenRootTypes['NDReporter'] | null> | null; // [NDReporter]
+    createVideoTags: Array<NexusGenRootTypes['NDVideoTag'] | null> | null; // [NDVideoTag]
+    createVideos: Array<NexusGenRootTypes['NDVideo'] | null> | null; // [NDVideo]
     updateContentTags: Array<NexusGenRootTypes['NDContentTag'] | null> | null; // [NDContentTag]
     updateReporters: Array<NexusGenRootTypes['NDReporter'] | null> | null; // [NDReporter]
+    updateVideoTags: Array<NexusGenRootTypes['NDVideoTag'] | null> | null; // [NDVideoTag]
+    updateVideos: Array<NexusGenRootTypes['NDVideo'] | null> | null; // [NDVideo]
   }
   NDBook: { // field return type
     addedBy: number; // Int!
@@ -197,8 +233,9 @@ export interface NexusGenFieldTypes {
     type: NexusGenEnums['ReporterType']; // ReporterType!
   }
   NDVideo: { // field return type
+    VideoTag: Array<NexusGenRootTypes['NDVideoTag'] | null> | null; // [NDVideoTag]
     addedBy: number; // Int!
-    id: string | null; // ID
+    id: number | null; // Int
     lastUpdated: NexusGenScalars['NDDateTime'] | null; // NDDateTime
     reporterId: number; // Int!
     source: string | null; // String
@@ -209,7 +246,7 @@ export interface NexusGenFieldTypes {
   NDVideoTag: { // field return type
     ContentTag: NexusGenRootTypes['NDContentTag'] | null; // NDContentTag
     addedBy: number; // Int!
-    id: string | null; // ID
+    id: number | null; // Int
     lastUpdated: NexusGenScalars['NDDateTime'] | null; // NDDateTime
     reporterId: number; // Int!
     status: NexusGenEnums['ContentStatus']; // ContentStatus!
@@ -239,6 +276,7 @@ export interface NexusGenFieldTypes {
     listBookTags: Array<NexusGenRootTypes['NDBookTag'] | null>; // [NDBookTag]!
     listContentTags: Array<NexusGenRootTypes['NDContentTag'] | null>; // [NDContentTag]!
     listReporters: Array<NexusGenRootTypes['NDReporter'] | null>; // [NDReporter]!
+    listVideos: Array<NexusGenRootTypes['NDVideo'] | null>; // [NDVideo]!
   }
 }
 
@@ -246,8 +284,12 @@ export interface NexusGenFieldTypeNames {
   Mutation: { // field return type name
     createContentTags: 'NDContentTag'
     createReporters: 'NDReporter'
+    createVideoTags: 'NDVideoTag'
+    createVideos: 'NDVideo'
     updateContentTags: 'NDContentTag'
     updateReporters: 'NDReporter'
+    updateVideoTags: 'NDVideoTag'
+    updateVideos: 'NDVideo'
   }
   NDBook: { // field return type name
     addedBy: 'Int'
@@ -284,8 +326,9 @@ export interface NexusGenFieldTypeNames {
     type: 'ReporterType'
   }
   NDVideo: { // field return type name
+    VideoTag: 'NDVideoTag'
     addedBy: 'Int'
-    id: 'ID'
+    id: 'Int'
     lastUpdated: 'NDDateTime'
     reporterId: 'Int'
     source: 'String'
@@ -296,7 +339,7 @@ export interface NexusGenFieldTypeNames {
   NDVideoTag: { // field return type name
     ContentTag: 'NDContentTag'
     addedBy: 'Int'
-    id: 'ID'
+    id: 'Int'
     lastUpdated: 'NDDateTime'
     reporterId: 'Int'
     status: 'ContentStatus'
@@ -326,6 +369,7 @@ export interface NexusGenFieldTypeNames {
     listBookTags: 'NDBookTag'
     listContentTags: 'NDContentTag'
     listReporters: 'NDReporter'
+    listVideos: 'NDVideo'
   }
 }
 
@@ -337,11 +381,23 @@ export interface NexusGenArgTypes {
     createReporters: { // args
       data: Array<NexusGenInputs['CreateReporterInput'] | null>; // [CreateReporterInput]!
     }
+    createVideoTags: { // args
+      data: Array<NexusGenInputs['TagVideoInput'] | null>; // [TagVideoInput]!
+    }
+    createVideos: { // args
+      data: Array<NexusGenInputs['CreateVideoInput'] | null>; // [CreateVideoInput]!
+    }
     updateContentTags: { // args
       data: Array<NexusGenInputs['UpdateContentTagInput'] | null>; // [UpdateContentTagInput]!
     }
     updateReporters: { // args
       data: Array<NexusGenInputs['UpdateReporterInput'] | null>; // [UpdateReporterInput]!
+    }
+    updateVideoTags: { // args
+      data: Array<NexusGenInputs['TagVideoInput'] | null>; // [TagVideoInput]!
+    }
+    updateVideos: { // args
+      data: Array<NexusGenInputs['UpdateVideoInput'] | null>; // [UpdateVideoInput]!
     }
   }
   Query: {
@@ -355,6 +411,13 @@ export interface NexusGenArgTypes {
     listReporters: { // args
       name?: string | null; // String
       type?: NexusGenEnums['ReporterType'] | null; // ReporterType
+    }
+    listVideos: { // args
+      reporterId?: number | null; // Int
+      source?: string | null; // String
+      status?: NexusGenEnums['ContentStatus'] | null; // ContentStatus
+      title?: string | null; // String
+      url?: string | null; // String
     }
   }
 }

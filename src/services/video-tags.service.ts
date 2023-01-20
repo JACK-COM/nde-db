@@ -1,26 +1,32 @@
 import { ContentTag, Prisma } from "@prisma/client";
 import { context } from "../graphql/context";
+import { falsy } from "./utils";
 
-type CreateTagInput = Prisma.VideoTagUncheckedCreateInput & { id?: number };
-type SearchTagInput = Pick<
+export type CreateTagInput = Prisma.VideoTagUncheckedCreateInput & {
+  id?: number;
+};
+export type SearchTagInput = Pick<
   CreateTagInput,
   "reporterId" | "tagId" | "videoId" | "status"
 >;
-type TagByIdInput = Pick<ContentTag, "id">;
+export type TagByIdInput = Pick<ContentTag, "id">;
 const { VideoTags: Tags } = context;
 
 /** create multiple video tags */
-export async function createMultipleTags(data: CreateTagInput[]) {
-  return Tags.createMany({ data });
+export async function upsertVideoTags(data: CreateTagInput[]) {
+  return Promise.all(
+    data.map((d) =>
+      falsy.includes(d.id)
+        ? Tags.create({ data: d })
+        : Tags.update({ data: d, where: { id: d.id } })
+    )
+  );
 }
 
-/** create video tag */
+/** create single video tag */
 export async function upsertVideoTag(data: CreateTagInput) {
-  return Tags.upsert({
-    create: data,
-    update: data,
-    where: { id: data.id }
-  });
+  const result = await upsertVideoTags([data]);
+  return result[0];
 }
 
 /** find all video tags matching params */

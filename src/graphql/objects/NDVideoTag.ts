@@ -5,7 +5,7 @@ export const NDVideoTag = objectType({
   name: "NDVideoTag",
   description: "Video content tags",
   definition(t) {
-    t.id("id");
+    t.int("id");
     t.nonNull.int("videoId");
     t.nonNull.int("tagId");
     t.nonNull.int("reporterId", { description: "EXPERIENCE reporter" });

@@ -20,11 +20,22 @@ input CreateReporterInput {
   type: ReporterType!
 }
 
+input CreateVideoInput {
+  reporterId: Int!
+  source: VideoSource = other
+  title: String!
+  url: String!
+}
+
 type Mutation {
   createContentTags(data: [CreateContentTagInput]!): [NDContentTag]
   createReporters(data: [CreateReporterInput]!): [NDReporter]
+  createVideoTags(data: [TagVideoInput]!): [NDVideoTag]
+  createVideos(data: [CreateVideoInput]!): [NDVideo]
   updateContentTags(data: [UpdateContentTagInput]!): [NDContentTag]
   updateReporters(data: [UpdateReporterInput]!): [NDReporter]
+  updateVideoTags(data: [TagVideoInput]!): [NDVideoTag]
+  updateVideos(data: [UpdateVideoInput]!): [NDVideo]
 }
 
 """A book detailing one or more EXPERIENCEs"""
@@ -98,9 +109,12 @@ type NDReporter {
 
 """Interviews about a single EXPERIENCE or REPORTER."""
 type NDVideo {
+  """Video content tags"""
+  VideoTag: [NDVideoTag]
+
   """User that added this recordd"""
   addedBy: Int!
-  id: ID
+  id: Int
 
   """Date content was last updated"""
   lastUpdated: NDDateTime
@@ -127,7 +141,7 @@ type NDVideoTag {
 
   """User that added this recordd"""
   addedBy: Int!
-  id: ID
+  id: Int
 
   """Date content was last updated"""
   lastUpdated: NDDateTime
@@ -188,6 +202,9 @@ type Query {
 
   """List Content Tags for a single book"""
   listReporters(name: String, type: ReporterType): [NDReporter]!
+
+  """List Videos that match one or more search parameters"""
+  listVideos(reporterId: Int, source: String, status: ContentStatus, title: String, url: String): [NDVideo]!
 }
 
 """Describes a type of EXPERIENCE reporter"""
@@ -195,6 +212,27 @@ enum ReporterType {
   experiencer
   observer
   researcher
+}
+
+input TagBookInput {
+  bookId: Int!
+  id: Int
+  reporterId: Int!
+  tagId: Int!
+}
+
+input TagSiteInput {
+  id: Int
+  reporterId: Int!
+  tagId: Int!
+  websiteId: Int!
+}
+
+input TagVideoInput {
+  reporterId: Int!
+  tagId: Int!
+  timestamp: String
+  videoId: Int!
 }
 
 input UpdateContentTagInput {
@@ -206,8 +244,16 @@ input UpdateContentTagInput {
 
 input UpdateReporterInput {
   id: Int!
-  name: String!
-  type: ReporterType!
+  name: String
+  type: ReporterType
+}
+
+input UpdateVideoInput {
+  id: Int!
+  reporterId: Int
+  source: VideoSource
+  title: String
+  url: String
 }
 
 """Roles assigned to data readers/writers"""

@@ -1,5 +1,6 @@
 import { ContentTag, Prisma } from "@prisma/client";
 import { context } from "../graphql/context";
+import { falsy } from "./utils";
 
 export type CreateReporterInput = Prisma.ReporterUncheckedCreateInput;
 export type UpdateReporterInput = Prisma.ContentTagUpdateArgs["data"];
@@ -14,9 +15,9 @@ const { Reporters } = context;
 export async function upsertMultipleReporters(data: CreateReporterInput[]) {
   return await Promise.all(
     data.map((d) =>
-      d.id
-        ? Reporters.update({ data: d, where: { id: d.id } })
-        : Reporters.create({ data: d })
+      falsy.includes(d.id)
+        ? Reporters.create({ data: d })
+        : Reporters.update({ data: d, where: { id: d.id } })
     )
   );
 }

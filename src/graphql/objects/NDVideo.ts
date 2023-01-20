@@ -5,7 +5,7 @@ export const NDVideo = objectType({
   name: "NDVideo",
   description: "Interviews about a single EXPERIENCE or REPORTER.",
   definition(t) {
-    t.id("id");
+    t.int("id");
     t.nonNull.string("title", { description: "Video Title" });
     t.nonNull.string("url", { description: "Video URL" });
     t.string("source", { description: "youtube | vimeo | other" });
@@ -24,8 +24,11 @@ export const NDVideo = objectType({
 
     // Relational fields
 
+    t.list.field("VideoTag", {
+      type: "NDVideoTag",
+      description: "Video content tags"
+    });
     // Reporter;
     // User;
-    // VideoTags[];
   }
 });

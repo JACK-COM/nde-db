@@ -1,5 +1,6 @@
 import { ContentTag, Prisma } from "@prisma/client";
 import { context } from "../graphql/context";
+import { falsy } from "./utils";
 
 export type CreateTagInput = Prisma.ContentTagCreateInput & { id?: number };
 export type UpdateTagInput = Prisma.ContentTagUpdateArgs["data"];
@@ -11,9 +12,9 @@ const { ContentTags: Tags } = context;
 export async function upsertMultipleTags(data: CreateTagInput[]) {
   return await Promise.all(
     data.map((d) =>
-      d.id
-        ? Tags.update({ data: d, where: { id: d.id } })
-        : Tags.create({ data: d })
+      falsy.includes(d.id)
+        ? Tags.create({ data: d })
+        : Tags.update({ data: d, where: { id: d.id } })
     )
   );
 }
